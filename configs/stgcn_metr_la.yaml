@@ -1,0 +1,44 @@
+# STGCN Configuration for METR-LA Dataset
+# ==========================================
+# Spatio-Temporal Graph Convolutional Network
+# Yu et al., IJCAI 2018
+
+experiment:
+  name: stgcn_metr_la
+  seed: 42
+
+dataset:
+  name: metr_la
+  data_dir: ./data/metr_la
+  T_in: 12          # 1-hour history (5-min intervals)
+  T_out: 12         # 1-hour prediction horizon
+  val_ratio: 0.1
+  test_ratio: 0.2
+
+model:
+  name: stgcn
+  num_blocks: 2
+  hidden_channels: 64
+  K: 3              # Chebyshev polynomial order
+  dropout: 0.0
+
+training:
+  epochs: 100
+  batch_size: 32
+  lr: 0.001
+  weight_decay: 0.0001
+  patience: 15
+  clip_grad: 5.0
+  scheduler: cosine
+
+device: auto
+
+logging:
+  log_dir: ./logs
+  ckpt_dir: ./checkpoints
+
+# Expected benchmark results on METR-LA (15/30/60 min horizons):
+# Horizon  | MAE   | RMSE  | MAPE
+# 15 min   | 2.88  | 5.74  | 7.62%
+# 30 min   | 3.47  | 7.24  | 9.57%
+# 60 min   | 4.59  | 9.40  | 12.70%
